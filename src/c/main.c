@@ -16,17 +16,23 @@ struct Event {
 Window *my_window;
 TextLayer *text_layer;
 
-void split_string(char* buffer, char* array[]) {
-  char word[64] = "";
+/*************************************************
+* split_string
+* Split string at "|" and store in array
+*************************************************/
+void split_string(char* buffer, char *array[], int array_size) {
+  char word[64] = ""; 
   int i = 0;
   
   for (char* p = buffer; *p; p++) {
     if (*p != '|') {
       word[strlen(word)] = *p;
     } else {
-      array[i++] = word;
-      APP_LOG(APP_LOG_LEVEL_ERROR, array[i - 1]);
-      memset(word, 0, 64);
+      char temp[sizeof(word)];
+      strncpy(temp, word, sizeof(temp));
+      array[i] = temp;
+      i++;
+      memset(&word[0], 0, sizeof(word));
     }
   }
 }
@@ -57,12 +63,10 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     snprintf(event_dates_buffer, sizeof(event_dates_buffer), "%s", dates_tuple->value->cstring);
     snprintf(event_times_buffer, sizeof(event_times_buffer), "%s", times_tuple->value->cstring);
     event_count = atoi(count_tuple->value->cstring);
-   
-    char *names_array[event_count];
-    split_string(event_names_buffer, names_array);
-    for (int i = 0; i < event_count; i++) {
-      APP_LOG(APP_LOG_LEVEL_ERROR, names_array[i]);
-    }
+    
+    char *names_array[256];
+    split_string(event_names_buffer, names_array, event_count);
+    APP_LOG(APP_LOG_LEVEL_ERROR, names_array[0]);
   }
 }
 
