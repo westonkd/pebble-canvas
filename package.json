@@ -10,7 +10,8 @@
             "EVENT_NAMES",
             "EVENT_TYPES",
             "EVENT_DATES",
-            "EVENT_TIMES"
+            "EVENT_TIMES",
+            "EVENT_COUNT"
         ],
         "projectType": "native",
         "resources": {

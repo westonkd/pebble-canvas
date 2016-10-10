@@ -1,13 +1,69 @@
 #include <pebble.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+/*************************************************
+* Event struct
+*************************************************/
+struct Event {
+  char name[128];
+  bool isAssignment;
+  char date[32];
+  char time[32];
+};
 
 Window *my_window;
 TextLayer *text_layer;
 
+void split_string(char* buffer, char* array[]) {
+  char word[64] = "";
+  int i = 0;
+  
+  for (char* p = buffer; *p; p++) {
+    if (*p != '|') {
+      word[strlen(word)] = *p;
+    } else {
+      array[i++] = word;
+      APP_LOG(APP_LOG_LEVEL_ERROR, array[i - 1]);
+      memset(word, 0, 64);
+    }
+  }
+}
+
 /*************************************************
 * inbox_received_callback
 *************************************************/
-static void inbox_received_callback(DictionaryIterator  *iterator, void *context) {
+static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
+  // Buffers for incoming messages
+  static char event_names_buffer[256];
+  static char event_types_buffer[256];
+  static char event_dates_buffer[256];
+  static char event_times_buffer[256];
   
+  int event_count = 0;
+  
+  // Read tuples for data
+  Tuple *names_tuple = dict_find(iterator, MESSAGE_KEY_EVENT_NAMES);
+  Tuple *types_tuple = dict_find(iterator, MESSAGE_KEY_EVENT_TYPES);
+  Tuple *dates_tuple = dict_find(iterator, MESSAGE_KEY_EVENT_DATES);
+  Tuple *times_tuple = dict_find(iterator, MESSAGE_KEY_EVENT_TIMES);
+  Tuple *count_tuple = dict_find(iterator, MESSAGE_KEY_EVENT_COUNT);
+  
+  // Use all data if it is available
+  if (names_tuple && types_tuple && dates_tuple && times_tuple && count_tuple) {
+    snprintf(event_names_buffer, sizeof(event_names_buffer), "%s", names_tuple->value->cstring);
+    snprintf(event_types_buffer, sizeof(event_types_buffer), "%s", types_tuple->value->cstring);
+    snprintf(event_dates_buffer, sizeof(event_dates_buffer), "%s", dates_tuple->value->cstring);
+    snprintf(event_times_buffer, sizeof(event_times_buffer), "%s", times_tuple->value->cstring);
+    event_count = atoi(count_tuple->value->cstring);
+   
+    char *names_array[event_count];
+    split_string(event_names_buffer, names_array);
+    for (int i = 0; i < event_count; i++) {
+      APP_LOG(APP_LOG_LEVEL_ERROR, names_array[i]);
+    }
+  }
 }
 
 /*************************************************

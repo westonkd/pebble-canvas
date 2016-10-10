@@ -35,7 +35,8 @@ class ApiHelper {
       'EVENT_NAMES': eventNames,
       'EVENT_TYPES': eventTypes,
       'EVENT_DATES': eventDates,
-      'EVENT_TIMES': eventTimes
+      'EVENT_TIMES': eventTimes,
+      'EVENT_COUNT': data.length.toString()
     };
     
     Pebble.sendAppMessage(dictionary, self.successHandler, self.errorHandler);
