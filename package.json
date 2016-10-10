@@ -1,0 +1,21 @@
+{
+    "author": "wdrans@gmail.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "pebble-canvas",
+    "pebble": {
+        "displayName": "Pebble Canvas",
+        "enableMultiJS": false,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "uuid": "305952a7-8de5-40c0-b7ab-b4fdc8827ed1",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}
