@@ -20,7 +20,7 @@ TextLayer *text_layer;
 * split_string
 * Split string at "|" and store in array
 *************************************************/
-void split_string(char* buffer, char *array[], int array_size) {
+void split_string(char* buffer, char array[][256], int array_size) {
   char word[64] = ""; 
   int i = 0;
   
@@ -28,9 +28,8 @@ void split_string(char* buffer, char *array[], int array_size) {
     if (*p != '|') {
       word[strlen(word)] = *p;
     } else {
-      char temp[sizeof(word)];
-      strncpy(temp, word, sizeof(temp));
-      array[i] = temp;
+      APP_LOG(APP_LOG_LEVEL_ERROR, word);
+      strcpy(array[i], word);
       i++;
       memset(&word[0], 0, sizeof(word));
     }
@@ -64,9 +63,14 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     snprintf(event_times_buffer, sizeof(event_times_buffer), "%s", times_tuple->value->cstring);
     event_count = atoi(count_tuple->value->cstring);
     
-    char *names_array[256];
-    split_string(event_names_buffer, names_array, event_count);
-    APP_LOG(APP_LOG_LEVEL_ERROR, names_array[0]);
+    char names_array[event_count][256];
+    for (int i = 0; i < event_count; i++)
+      memset(&names_array[i], 0, sizeof(names_array[i]));
+    
+    split_string(event_names_buffer, names_array, 1);
+    for (int i = 0; i < event_count; i++) {
+      APP_LOG(APP_LOG_LEVEL_ERROR, names_array[i]);
+    }
   }
 }
 
