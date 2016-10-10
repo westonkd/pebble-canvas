@@ -6,12 +6,22 @@
     "pebble": {
         "displayName": "Pebble Canvas",
         "enableMultiJS": false,
-        "messageKeys": [],
+        "messageKeys": [
+            "EVENT_NAMES",
+            "EVENT_TYPES",
+            "EVENT_DATES",
+            "EVENT_TIMES"
+        ],
         "projectType": "native",
         "resources": {
             "media": []
         },
         "sdkVersion": "3",
+        "targetPlatforms": [
+            "aplite",
+            "basalt",
+            "chalk"
+        ],
         "uuid": "305952a7-8de5-40c0-b7ab-b4fdc8827ed1",
         "watchapp": {
             "watchface": false
